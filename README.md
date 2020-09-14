@@ -30,3 +30,13 @@ spreadsheet exports in most projects.
 One regression is in XLSX styling. For the initial version of this package, no styling can be applied to generated 
 XLSX files. Since this is not an essential feature for most export use-cases, it has been left as a potential future feature
 
+## Usage
+
+To use this package, simply add the `SpreadsheetMixIn` to a ViewSet! By default, both CSV and XLSX formats will be 
+available on that view. There are three fields provided by `SpreadsheetMixIn`:
+ 
+ |field|default|use|
+ |-----|-------|---|
+ |enable_csv|True|Allows CSV format to be accessed on that particular ViewSet|
+ |enable_xlsx|True|Allows XLSX format to be accessed on that particular ViewSet|
+ |filename|None|Overrides the auto-generated filename of the form "\<Model name> Report"|

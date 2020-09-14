@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="drf-spreadsheets-jpaavola",
+    name="drf-spreadsheets",
     version="1.0.0",
     author="Joe Paavola",
     author_email="joepaavola@gmail.com",
