@@ -1,3 +1,5 @@
 /.idea/
 /dist/
 /build/
+/drf_spreadsheets.egg-info/
+/drf_spreadsheets_jpaavola.egg-info/
