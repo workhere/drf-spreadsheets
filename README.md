@@ -33,12 +33,24 @@ XLSX files. Since this is not an essential feature for most export use-cases, it
 ## Usage
 
 To use this package, simply add the `SpreadsheetMixIn` to a ViewSet! By default, both CSV and XLSX formats will be 
-available on that view. There are three fields provided by `SpreadsheetMixIn`:
+available on that view. There are six fields provided by `SpreadsheetMixIn`:
  
  |field|default|use|
  |-----|-------|---|
  |enable_csv|True|Allows CSV format to be accessed on that particular ViewSet|
  |enable_xlsx|True|Allows XLSX format to be accessed on that particular ViewSet|
- |enable_on_detail|False|Allows the CSV and/or XLSX renderers to be used on detail views (ie not list views)|
- |enable_defaults|True|Allows the default renderers found in api_settings to also be used. If set to false, exclusively the spreadsheet renderers will be used|
+ |enable_spreadsheets_on_details|False|Allows the CSV and/or XLSX renderers to be used on detail views (ie not list views)|
+ |enable_renderer_defaults|True|Allows the default renderers found in api_settings to also be used. If set to false, exclusively the spreadsheet renderers will be used|
  |filename|None|Overrides the auto-generated filename of the form "\<Model name> Report" or "\<View name> Report" if no model is available|
+ |spreadsheet_headers|None|Overrides the auto-generated columns with either a list or a dictionary. If it is set to be a dictionary, the keys will be columns to include and the values will be their names/labels.|
+ 
+An alternative to providing `spreadsheet_headers` as a field through `SpreadsheetMixIn` is providing it via overriding
+the `get_renderer_context()` method. For example
+
+```lang=py
+    def get_renderer_context(self):
+        context = super(MyViewSet, self).get_renderer_context()
+        if 'headers' in self.request.GET:
+            context["spreadsheet_headers"] = self.request.GET['headers'].split(',')
+        return context
+```

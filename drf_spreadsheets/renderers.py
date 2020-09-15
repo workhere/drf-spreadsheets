@@ -9,10 +9,8 @@ from rest_framework.response import Response
 
 class SpreadsheetRenderer(BaseRenderer, ABC):
     level_sep = "."
-    header = None
-    labels = None  # {'<field>':'<label>'}
 
-    def tablize(self, data, header=None, labels=None):
+    def tablize(self, data, header=None):
         """
         Convert a list of data into a table.
         If there is a header provided to tablize it will efficiently yield each
@@ -21,10 +19,6 @@ class SpreadsheetRenderer(BaseRenderer, ABC):
         you have a lot of data and want to stream it, you should probably
         provide a header to the renderer (via the `renderer_context`).
         """
-        # Try to pull the header off of the data, if it's not passed in as an
-        # argument.
-        if not header and hasattr(data, "header"):
-            header = data.header
 
         if data:
             # First, flatten the data (i.e., convert it to a list of
@@ -42,10 +36,8 @@ class SpreadsheetRenderer(BaseRenderer, ABC):
                 for item in data:
                     header_fields.update(list(item.keys()))
                 header = sorted(header_fields)
-
-            # Return your "table", with the headers as the first row.
-            if labels:
-                yield [labels.get(x, x) for x in header]
+            if isinstance(header, dict):
+                yield [header.get(x, x) for x in header]
             else:
                 yield header
 
@@ -57,8 +49,8 @@ class SpreadsheetRenderer(BaseRenderer, ABC):
 
         elif header:
             # If there's no data but a header was supplied, yield the header.
-            if labels:
-                yield [labels.get(x, x) for x in header]
+            if isinstance(header, dict):
+                yield [header.get(x, x) for x in header]
             else:
                 yield header
 
@@ -142,10 +134,9 @@ class CSVRenderer(SpreadsheetRenderer):
         if not isinstance(data, list):
             data = [data]
 
-        header = renderer_context.get("header", self.header)
-        labels = renderer_context.get("labels", self.labels)
+        header = renderer_context.get("spreadsheet_headers")
 
-        table = self.tablize(data, header=header, labels=labels)
+        table = self.tablize(data, header=header)
         csv_buffer = StringIO()
         csv_writer = csv.writer(csv_buffer)
         for row in table:
@@ -176,11 +167,11 @@ class XLSXRenderer(SpreadsheetRenderer):
             data = [data]
 
         # Take header and column_header params from view
-        worksheet_title = "Report Worksheet"
+        header = renderer_context.get("spreadsheet_headers")
 
-        table = self.tablize(data)
+        table = self.tablize(data, header=header)
         wb = Workbook()
-        wb.active.title = worksheet_title
+        wb.active.title = "Report Worksheet"
         for row in table:
             wb.active.append(row)
 

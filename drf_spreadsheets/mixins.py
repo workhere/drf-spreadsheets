@@ -18,29 +18,45 @@ class SpreadsheetMixIn:
     # If set to True, the renderers provided by this MixIn will be available on views marked as "details".
     # This is particularly useful for ViewSets, where the list view should have spreadsheet capabilities,
     # but the single record detail should not.
-    enable_on_detail = False
+    enable_spreadsheets_on_details = False
 
     # If set to True, the default renderers found in api_settings.DEFAULT_RENDERER_CLASSES will be preserved as options
     # for the view this MixIn is added to. Setting this to false should only be done for spreadsheet only endpoints.
-    enable_defaults = True
+    enable_renderer_defaults = True
 
     # Setting filename will override the default naming system, which take the model or viewset name and appends
     # ' Report' and the file extension. You do not need to include the file extension in this parameter, it will be
     # automatically resolved for you.
     filename = None
 
+    # Setting spreadsheet_headers to a list will override which columns are included in the spreadsheet. Setting it to
+    # a dictionary will allow renaming of headers from their original field names. For example:
+    #   spreadsheet_headers = {'id': 'id', 'full_name': 'name'}
+    # will include just the id and full_name fields as columns and will use 'name' as the column header instead of the
+    # default 'full_name'. If this field is set to None (default value), all fields will be used in alphabetical order.
+    spreadsheet_headers = None
+
     def __init__(self, *args, **kwargs):
-        if not kwargs["detail"] or self.enable_on_detail:
+        if not kwargs["detail"] or self.enable_spreadsheets_on_details:
             classes = []
             if self.enable_csv:
                 classes.append(CSVRenderer)
             if self.enable_xlsx:
                 classes.append(XLSXRenderer)
-            if self.enable_defaults:
+            if self.enable_renderer_defaults:
                 self.renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + classes
             else:
                 self.renderer_classes = classes
         super(SpreadsheetMixIn, self).__init__()
+
+    def get_renderer_context(self):
+        """
+        Overrides renderer_context with the spreadsheet_headers field if they exist
+        """
+        context = super(SpreadsheetMixIn, self).get_renderer_context()
+        if self.spreadsheet_headers:
+            context["spreadsheet_headers"] = self.spreadsheet_headers
+        return context
 
     def paginate_queryset(self, queryset):
         """
@@ -60,7 +76,7 @@ class SpreadsheetMixIn:
             request, response, *args, **kwargs
         )
 
-        if isinstance(response, Response):
+        if isinstance(response.accepted_renderer, SpreadsheetRenderer):
             # Resolve filename, either from override, model, or view name
             if self.filename is not None:
                 filename = self.filename

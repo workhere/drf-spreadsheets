@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="drf-spreadsheets",
-    version="1.0.2",
+    version="1.0.3",
     author="Joe Paavola",
     author_email="joe@workhere.com",
     description="A Django REST Framework package allowing views to be rendered as CSV or XLSX",
