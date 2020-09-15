@@ -105,6 +105,7 @@ class SpreadsheetRenderer(BaseRenderer, ABC):
     def flatten_list(self, l):
         flat_list = {}
         for index, item in enumerate(l):
+            index = str(index)
             flat_item = self.flatten_item(item)
             nested_item = self.nest_flat_item(flat_item, index)
             flat_list.update(nested_item)
@@ -113,6 +114,7 @@ class SpreadsheetRenderer(BaseRenderer, ABC):
     def flatten_dict(self, d):
         flat_dict = {}
         for key, item in d.items():
+            key = str(key)
             flat_item = self.flatten_item(item)
             nested_item = self.nest_flat_item(flat_item, key)
             flat_dict.update(nested_item)
