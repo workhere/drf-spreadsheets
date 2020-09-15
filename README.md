@@ -39,4 +39,6 @@ available on that view. There are three fields provided by `SpreadsheetMixIn`:
  |-----|-------|---|
  |enable_csv|True|Allows CSV format to be accessed on that particular ViewSet|
  |enable_xlsx|True|Allows XLSX format to be accessed on that particular ViewSet|
- |filename|None|Overrides the auto-generated filename of the form "\<Model name> Report"|
+ |enable_on_detail|False|Allows the CSV and/or XLSX renderers to be used on detail views (ie not list views)|
+ |enable_defaults|True|Allows the default renderers found in api_settings to also be used. If set to false, exclusively the spreadsheet renderers will be used|
+ |filename|None|Overrides the auto-generated filename of the form "\<Model name> Report" or "\<View name> Report" if no model is available|
