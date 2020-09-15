@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 
 from drf_spreadsheets.renderers import CSVRenderer, XLSXRenderer, SpreadsheetRenderer
 
@@ -15,10 +16,12 @@ class SpreadsheetMixIn:
     filename = None
 
     def __init__(self, *args, **kwargs):
+        classes = []
         if self.enable_csv and CSVRenderer not in self.renderer_classes:
-            self.renderer_classes.append(CSVRenderer)
+            classes.append(CSVRenderer)
         if self.enable_xlsx and XLSXRenderer not in self.renderer_classes:
-            self.renderer_classes.append(XLSXRenderer)
+            classes.append(XLSXRenderer)
+        self.renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + classes
         super(SpreadsheetMixIn, self).__init__()
 
     def paginate_queryset(self, queryset):
