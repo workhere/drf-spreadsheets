@@ -7,11 +7,11 @@ setuptools.setup(
     name="drf-spreadsheets",
     version="1.0.2",
     author="Joe Paavola",
-    author_email="joepaavola@gmail.com",
+    author_email="joe@workhere.com",
     description="A Django REST Framework package allowing views to be rendered as CSV or XLSX",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/jpaav/drf-spreadsheets",
+    url="https://github.com/workhere/drf-spreadsheets",
     packages=setuptools.find_packages(),
     install_requires=["Django>=3.1", "djangorestframework>=3.6", "openpyxl>=2.4"],
     classifiers=[
