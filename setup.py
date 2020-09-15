@@ -15,10 +15,12 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=["Django>=3.1", "djangorestframework>=3.6", "openpyxl>=2.4"],
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Framework :: Django",
+        "Framework :: Django :: 3.1",
+        "Development Status :: 3 - Alpha"
     ],
     python_requires='>=3.6',
 
