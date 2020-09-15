@@ -1,8 +1,8 @@
 # Django REST Spreadsheets renderer
 
 This project pulls work from [drf-renderer-xlsx](https://github.com/wharton/drf-renderer-xlsx) and 
-[django-rest-framework-csv](https://github.com/mjumbewu/django-rest-framework-csv) aiming to combine these renders into
-a single package while fixing some of their individual quirks.
+[django-rest-framework-csv](https://github.com/mjumbewu/django-rest-framework-csv) aiming to combine these renderers
+into a single package while fixing some of their individual quirks.
 
 ## Differences
 An important use case for file export in a RESTful API is to allow the user to manipulate data using their own tools. 
@@ -21,8 +21,8 @@ class YourViewSet(SpreadsheetMixIn, ModelViewSet):
 
 ```
 
-This instead of manually overriding renderer_classes, or adding the renderer to the defaults. The former is clunky and 
-can lead to unwanted behavior and the latter is rarely necessary since there will be many endpoints that don't need
+This instead of manually overriding `renderer_classes`, or adding the renderer to the defaults. The former is clunky and 
+can lead to unwanted behavior, and the latter is rarely necessary since there will be many endpoints that don't need
 spreadsheet exports in most projects.
 
 ---
