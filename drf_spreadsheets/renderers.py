@@ -1,6 +1,9 @@
 import csv
 from abc import ABC
 from io import StringIO
+
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
 from rest_framework.renderers import BaseRenderer
@@ -176,3 +179,47 @@ class XLSXRenderer(SpreadsheetRenderer):
 
         # Save
         return save_virtual_workbook(wb)
+
+
+class GoogleSheetsRenderer(SpreadsheetRenderer):
+    """
+    Renderer which serializes to a Google Sheet and then redirects to it using and HTML meta redirect
+    """
+
+    media_type = "text/html"
+    format = "Google Sheets"
+
+    def render(self, data, media_type=None, renderer_context=None):
+        """
+        Renders serialized *data* into XLSX
+        """
+        if renderer_context is None:
+            renderer_context = {}
+
+        if data is None:
+            return ""
+
+        if not isinstance(data, list):
+            data = [data]
+
+        # Take header and column_header params from view
+        header = renderer_context.get("spreadsheet_headers")
+
+        # secrets = {}
+        #
+        # flow = InstalledAppFlow.from_client_config(
+        #     secrets, "https://www.googleapis.com/auth/drive.file"
+        # )
+        # creds = flow.run_local_server(port=0)
+        #
+        # service = build("sheets", "v4", credentials=creds)
+        #
+        # spreadsheet = {"properties": {"title": "Testing title"}}
+        # spreadsheet = (
+        #     service.spreadsheets()
+        #     .create(body=spreadsheet, fields="spreadsheetId")
+        #     .execute()
+        # )
+        # print("Spreadsheet ID: {0}".format(spreadsheet.get("spreadsheetId")))
+
+        return f'<head><meta http-equiv="Refresh" content="0; URL=https://www.google.com"></head>'

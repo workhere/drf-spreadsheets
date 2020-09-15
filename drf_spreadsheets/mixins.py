@@ -1,7 +1,6 @@
-from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
-from drf_spreadsheets.renderers import CSVRenderer, XLSXRenderer, SpreadsheetRenderer
+from drf_spreadsheets.renderers import CSVRenderer, XLSXRenderer, SpreadsheetRenderer, GoogleSheetsRenderer
 
 
 class SpreadsheetMixIn:
@@ -14,6 +13,8 @@ class SpreadsheetMixIn:
 
     # If set to True, the XLSXRenderer will be made available in the view this MixIn is added to
     enable_xlsx = True
+
+    enable_gsheets = False
 
     # If set to True, the renderers provided by this MixIn will be available on views marked as "details".
     # This is particularly useful for ViewSets, where the list view should have spreadsheet capabilities,
@@ -43,6 +44,8 @@ class SpreadsheetMixIn:
                 classes.append(CSVRenderer)
             if self.enable_xlsx:
                 classes.append(XLSXRenderer)
+            if self.enable_gsheets:
+                classes.append(GoogleSheetsRenderer)
             if self.enable_renderer_defaults:
                 self.renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + classes
             else:
@@ -86,10 +89,10 @@ class SpreadsheetMixIn:
                 filename = f"{self.get_view_name()} Report"
 
             # Only add Content-Disposition if the renderer is XLSX or CSV
-            if response.accepted_renderer.format == "xlsx":
+            if isinstance(response.accepted_renderer, XLSXRenderer):
                 response[
                     "Content-Disposition"
                 ] = f"attachment; filename={filename}.xlsx"
-            elif response.accepted_renderer.format == "csv":
+            elif isinstance(response.accepted_renderer, CSVRenderer):
                 response["Content-Disposition"] = f"attachment; filename={filename}.csv"
         return response
