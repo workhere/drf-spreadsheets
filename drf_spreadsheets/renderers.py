@@ -8,6 +8,10 @@ from rest_framework.response import Response
 
 
 class SpreadsheetRenderer(BaseRenderer, ABC):
+    level_sep = "."
+    header = None
+    labels = None  # {'<field>':'<label>'}
+
     def tablize(self, data, header=None, labels=None):
         """
         Convert a list of data into a table.
@@ -122,9 +126,6 @@ class CSVRenderer(SpreadsheetRenderer):
 
     media_type = "text/csv"
     format = "csv"
-    level_sep = "."
-    header = None
-    labels = None  # {'<field>':'<label>'}
 
     def render(self, data, media_type=None, renderer_context=None):
         """
