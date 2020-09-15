@@ -4,7 +4,6 @@ from io import StringIO
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
 from rest_framework.renderers import BaseRenderer
-from rest_framework.response import Response
 
 
 class SpreadsheetRenderer(BaseRenderer, ABC):
