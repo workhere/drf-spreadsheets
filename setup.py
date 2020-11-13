@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/workhere/drf-spreadsheets",
     packages=setuptools.find_packages(),
-    install_requires=["Django>=3.1", "djangorestframework>=3.6", "openpyxl>=2.4"],
+    install_requires=["djangorestframework>=3.6", "openpyxl>=2.4"],
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
         "License :: OSI Approved :: MIT License",
