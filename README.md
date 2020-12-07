@@ -43,6 +43,7 @@ available on that view. There are six fields provided by `SpreadsheetMixIn`:
  |enable_renderer_defaults|True|Allows the default renderers found in api_settings to also be used. If set to false, exclusively the spreadsheet renderers will be used|
  |filename|None|Overrides the auto-generated filename of the form "\<Model name> Report" or "\<View name> Report" if no model is available|
  |spreadsheet_headers|None|Overrides the auto-generated columns with either a list or a dictionary. If it is set to be a dictionary, the keys will be columns to include and the values will be their names/labels.|
+ |compact_columns|False|Renders secondary data structures as json strings instead of creating new columns for their children|
  
 An alternative to providing `spreadsheet_headers` as a field through `SpreadsheetMixIn` is providing it via overriding
 the `get_renderer_context()` method. For example

@@ -36,6 +36,10 @@ class SpreadsheetMixIn:
     # default 'full_name'. If this field is set to None (default value), all fields will be used in alphabetical order.
     spreadsheet_headers = None
 
+    # Setting compact_columns to True will cause lists and dictionaries to be serialized into strings instead of separate
+    # columns.
+    compact_columns = False
+
     def __init__(self, *args, **kwargs):
         if not kwargs["detail"] or self.enable_spreadsheets_on_details:
             classes = []
@@ -56,6 +60,7 @@ class SpreadsheetMixIn:
         context = super(SpreadsheetMixIn, self).get_renderer_context()
         if self.spreadsheet_headers:
             context["spreadsheet_headers"] = self.spreadsheet_headers
+        context["compact_columns"] = self.compact_columns
         return context
 
     def paginate_queryset(self, queryset):
