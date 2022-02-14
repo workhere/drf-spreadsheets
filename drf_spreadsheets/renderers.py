@@ -99,9 +99,9 @@ class SpreadsheetRenderer(BaseRenderer, ABC):
         for index, item in enumerate(l):
             if nest_compact:
                 if isinstance(item, dict) or isinstance(item, list):
-                    flat_dict[""] = json.dumps(item)
+                    flat_list[""] = json.dumps(item)
                 else:
-                    flat_dict[""] = str(item)
+                    flat_list[""] = str(item)
             else:
                 index = str(index)
                 flat_item = self.flatten_item(item, False)
