@@ -10,6 +10,26 @@ from rest_framework.renderers import BaseRenderer
 class SpreadsheetRenderer(BaseRenderer, ABC):
     level_sep = "."
 
+    def render_table(self, data, renderer_context=None):
+        """
+        Renders serialized *data* into a table.
+        """
+
+        if renderer_context is None:
+            renderer_context = {}
+
+        if data is None:
+            return None
+
+        if not isinstance(data, list):
+            data = [data]
+
+        # Take header and column_header params from view
+        header = renderer_context.get("spreadsheet_headers")
+        compact_columns = renderer_context.get("compact_columns")
+
+        return self.tablize(data, header=header, nest_compact=compact_columns)
+
     def tablize(self, data, header=None, nest_compact=False):
         """
         Convert a list of data into a table.
@@ -137,19 +157,11 @@ class CSVRenderer(SpreadsheetRenderer):
         """
         Renders serialized *data* into CSV. For a dictionary:
         """
-        if renderer_context is None:
-            renderer_context = {}
+        table = self.render_table(data, renderer_context)
 
-        if data is None:
+        if not table:
             return ""
 
-        if not isinstance(data, list):
-            data = [data]
-
-        header = renderer_context.get("spreadsheet_headers")
-        compact_columns = renderer_context.get("compact_columns")
-
-        table = self.tablize(data, header=header, nest_compact=compact_columns)
         csv_buffer = StringIO()
         csv_writer = csv.writer(csv_buffer)
         for row in table:
@@ -170,20 +182,11 @@ class XLSXRenderer(SpreadsheetRenderer):
         """
         Renders serialized *data* into XLSX
         """
-        if renderer_context is None:
-            renderer_context = {}
+        table = self.render_table(data, renderer_context)
 
-        if data is None:
+        if not table:
             return ""
 
-        if not isinstance(data, list):
-            data = [data]
-
-        # Take header and column_header params from view
-        header = renderer_context.get("spreadsheet_headers")
-        compact_columns = renderer_context.get("compact_columns")
-
-        table = self.tablize(data, header=header, nest_compact=compact_columns)
         wb = Workbook()
         wb.active.title = "Report Worksheet"
         for row in table:
