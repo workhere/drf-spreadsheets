@@ -55,3 +55,9 @@ the `get_renderer_context()` method. For example
             context["spreadsheet_headers"] = self.request.GET['headers'].split(',')
         return context
 ```
+
+## Contributors
+
+* Joe Paavola - https://github.com/jpaav 
+* Joshua David Thomas - https://github.com/joshuadavidthomas 
+* Mike Seidle - https://github.com/indymike
