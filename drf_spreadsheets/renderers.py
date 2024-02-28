@@ -1,4 +1,5 @@
 import csv
+import io
 import json
 from abc import ABC
 from io import StringIO
@@ -191,6 +192,7 @@ class XLSXRenderer(SpreadsheetRenderer):
         wb.active.title = "Report Worksheet"
         for row in table:
             wb.active.append(row)
-
+        with io.BytesIO() as buffer:
+            wb.save(buffer)
         # Save
-        return save_virtual_workbook(wb)
+        return buffer.getvalue()
